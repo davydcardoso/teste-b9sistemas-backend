@@ -19,8 +19,10 @@ export class GetAllProductsUseCase {
 
     const _products: Products[] = [];
 
-    for await (const row of products) {
-      _products.push(await this.mapper.toPersistence(row));
+    if (products) {
+      for await (const row of products) {
+        _products.push(await this.mapper.toPersistence(row));
+      }
     }
 
     return right({ products: _products });
