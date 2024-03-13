@@ -6,6 +6,7 @@ import { CreateNewProductUseCase } from './use-cases/create-new-product-usecase'
 import { PrismaModule } from 'src/prisma/prisma.module';
 import { GetAllProductsUseCase } from './use-cases/get-all-products-usecase';
 import { DeleteProductUseCase } from './use-cases/delete-product-usecase';
+import { EditProductDataUseCase } from './use-cases/edit-product-data-usecase';
 
 @Module({
   imports: [PrismaModule],
@@ -18,6 +19,7 @@ import { DeleteProductUseCase } from './use-cases/delete-product-usecase';
     CreateNewProductUseCase,
     GetAllProductsUseCase,
     DeleteProductUseCase,
+    EditProductDataUseCase,
   ],
 })
 export class ProductModule {}
