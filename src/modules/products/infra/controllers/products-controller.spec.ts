@@ -11,6 +11,7 @@ import { ProductsController } from './products-controller';
 import { ProductsRepository } from '../repositories/product-repository';
 import { ProductsRepositoryInMemory } from '../repositories/products-repository.in-memory';
 import { CreateNewProductUseCase } from '../../use-cases/create-new-product-usecase';
+import { GetAllProductsUseCase } from '../../use-cases/get-all-products-usecase';
 
 describe('ProductController (e2e)', () => {
   let app: NestFastifyApplication;
@@ -26,6 +27,7 @@ describe('ProductController (e2e)', () => {
           useClass: ProductsRepositoryInMemory,
         },
         CreateNewProductUseCase,
+        GetAllProductsUseCase,
       ],
     }).compile();
 
