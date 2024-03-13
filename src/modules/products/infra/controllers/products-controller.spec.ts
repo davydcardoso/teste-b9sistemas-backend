@@ -12,6 +12,9 @@ import { ProductsRepository } from '../repositories/product-repository';
 import { ProductsRepositoryInMemory } from '../repositories/products-repository.in-memory';
 import { CreateNewProductUseCase } from '../../use-cases/create-new-product-usecase';
 import { GetAllProductsUseCase } from '../../use-cases/get-all-products-usecase';
+import { DeleteProductUseCase } from '../../use-cases/delete-product-usecase';
+import { PRODUCT_TEST_ID } from '../../constants';
+import { randomUUID } from 'crypto';
 
 describe('ProductController (e2e)', () => {
   let app: NestFastifyApplication;
@@ -28,6 +31,7 @@ describe('ProductController (e2e)', () => {
         },
         CreateNewProductUseCase,
         GetAllProductsUseCase,
+        DeleteProductUseCase,
       ],
     }).compile();
 
@@ -108,6 +112,36 @@ describe('ProductController (e2e)', () => {
         })
         .then((result) => {
           expect(result.statusCode).toBe(201);
+        });
+    });
+  });
+
+  describe('/DELETE - Delete Product', () => {
+    it('Should error if product not exists', async () => {
+      return app
+        .inject({
+          method: 'DELETE',
+          path: '/products',
+          headers: {
+            product_id: randomUUID(),
+          },
+        })
+        .then((result) => {
+          expect(result.statusCode).toBe(400);
+        });
+    });
+
+    it('Should success 200 if product has been delete', async () => {
+      return app
+        .inject({
+          method: 'DELETE',
+          path: '/products',
+          headers: {
+            product_id: PRODUCT_TEST_ID,
+          },
+        })
+        .then((result) => {
+          expect(result.statusCode).toBe(200);
         });
     });
   });

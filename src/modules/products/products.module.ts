@@ -5,6 +5,7 @@ import { ProductsController } from './infra/controllers/products-controller';
 import { CreateNewProductUseCase } from './use-cases/create-new-product-usecase';
 import { PrismaModule } from 'src/prisma/prisma.module';
 import { GetAllProductsUseCase } from './use-cases/get-all-products-usecase';
+import { DeleteProductUseCase } from './use-cases/delete-product-usecase';
 
 @Module({
   imports: [PrismaModule],
@@ -16,6 +17,7 @@ import { GetAllProductsUseCase } from './use-cases/get-all-products-usecase';
     },
     CreateNewProductUseCase,
     GetAllProductsUseCase,
+    DeleteProductUseCase,
   ],
 })
 export class ProductModule {}

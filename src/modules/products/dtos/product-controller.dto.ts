@@ -3,3 +3,7 @@ export interface CreateProductRequestDTO {
   price: number;
   stock: number;
 }
+
+export interface DeleteProductRequestHeaderDTO {
+  product_id: string;
+}
