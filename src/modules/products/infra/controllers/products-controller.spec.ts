@@ -10,6 +10,7 @@ import { PrismaModule } from 'src/prisma/prisma.module';
 import { ProductsController } from './products-controller';
 import { ProductsRepository } from '../repositories/product-repository';
 import { ProductsRepositoryInMemory } from '../repositories/products-repository.in-memory';
+import { CreateNewProductUseCase } from '../../use-cases/create-new-product-usecase';
 
 describe('ProductController (e2e)', () => {
   let app: NestFastifyApplication;
@@ -24,6 +25,7 @@ describe('ProductController (e2e)', () => {
           provide: ProductsRepository,
           useClass: ProductsRepositoryInMemory,
         },
+        CreateNewProductUseCase,
       ],
     }).compile();
 
@@ -49,13 +51,61 @@ describe('ProductController (e2e)', () => {
           method: 'POST',
           path: '/products',
           payload: {
-            name: 'Pro',
+            name: '',
             price: 10,
             stock: 20,
           },
         })
         .then((result) => {
           expect(result.statusCode).toBe(400);
+        });
+    });
+
+    it('Should error 400 if product price is not valid', async () => {
+      return app
+        .inject({
+          method: 'POST',
+          path: '/products',
+          payload: {
+            name: 'Producto de testes 2',
+            price: -2,
+            stock: 20,
+          },
+        })
+        .then((result) => {
+          expect(result.statusCode).toBe(400);
+        });
+    });
+
+    it('Should error 400 if product stock is not valid', async () => {
+      return app
+        .inject({
+          method: 'POST',
+          path: '/products',
+          payload: {
+            name: 'Producto de testes 2',
+            price: 20,
+            stock: -20,
+          },
+        })
+        .then((result) => {
+          expect(result.statusCode).toBe(400);
+        });
+    });
+
+    it('Should success 201 if all products information is valid', async () => {
+      return app
+        .inject({
+          method: 'POST',
+          path: '/products',
+          payload: {
+            name: 'Producto de testes 2',
+            price: 20,
+            stock: 200,
+          },
+        })
+        .then((result) => {
+          expect(result.statusCode).toBe(201);
         });
     });
   });

@@ -1,6 +1,7 @@
 import { Mapper } from 'src/core/domain/mapper';
-import { ProductEntity } from '../domain/entity/products';
 import { Products } from '@prisma/client';
+import { ProductEntity } from '../domain/entity/products';
+
 import { Name } from '../domain/entity/name';
 import { Price } from '../domain/entity/price';
 import { Stock } from '../domain/entity/stock';

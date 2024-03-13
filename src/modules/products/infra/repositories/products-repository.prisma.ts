@@ -9,7 +9,9 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class ProductsRepositoryPrisma implements Repository<ProductEntity> {
   private readonly mapper: ProductMapper;
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) {
+    this.mapper = new ProductMapper();
+  }
 
   async create(product: ProductEntity): Promise<void> {
     const data = await this.mapper.toPersistence(product);
