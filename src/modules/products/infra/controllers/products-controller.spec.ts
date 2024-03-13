@@ -15,6 +15,7 @@ import { GetAllProductsUseCase } from '../../use-cases/get-all-products-usecase'
 import { DeleteProductUseCase } from '../../use-cases/delete-product-usecase';
 import { PRODUCT_TEST_ID } from '../../constants';
 import { randomUUID } from 'crypto';
+import { EditProductDataUseCase } from '../../use-cases/edit-product-data-usecase';
 
 describe('ProductController (e2e)', () => {
   let app: NestFastifyApplication;
@@ -32,6 +33,7 @@ describe('ProductController (e2e)', () => {
         CreateNewProductUseCase,
         GetAllProductsUseCase,
         DeleteProductUseCase,
+        EditProductDataUseCase,
       ],
     }).compile();
 
@@ -112,6 +114,94 @@ describe('ProductController (e2e)', () => {
         })
         .then((result) => {
           expect(result.statusCode).toBe(201);
+        });
+    });
+  });
+
+  describe('/PUT - Edit Product', () => {
+    it('should erro 400 if product name is not valid', async () => {
+      return app
+        .inject({
+          method: 'PUT',
+          path: '/products',
+          payload: {
+            name: '',
+            price: 10,
+            stock: 20,
+          },
+        })
+        .then((result) => {
+          expect(result.statusCode).toBe(400);
+        });
+    });
+
+    it('Should error 400 if product price is not valid', async () => {
+      return app
+        .inject({
+          method: 'PUT',
+          path: '/products',
+          payload: {
+            name: 'Producto de testes 2',
+            price: -2,
+            stock: 20,
+          },
+        })
+        .then((result) => {
+          expect(result.statusCode).toBe(400);
+        });
+    });
+
+    it('Should error 400 if product stock is not valid', async () => {
+      return app
+        .inject({
+          method: 'PUT',
+          path: '/products',
+          payload: {
+            name: 'Producto de testes 2',
+            price: 20,
+            stock: -20,
+          },
+        })
+        .then((result) => {
+          expect(result.statusCode).toBe(400);
+        });
+    });
+
+    it('Should error if product not exists', async () => {
+      return app
+        .inject({
+          method: 'PUT',
+          path: '/products',
+          payload: {
+            name: 'Producto de testes 2',
+            price: 20,
+            stock: -20,
+          },
+          headers: {
+            product_id: randomUUID(),
+          },
+        })
+        .then((result) => {
+          expect(result.statusCode).toBe(400);
+        });
+    });
+
+    it('Should success 200 if product has been edited', async () => {
+      return app
+        .inject({
+          method: 'PUT',
+          path: '/products',
+          payload: {
+            name: 'Producto de testes 2',
+            price: 20,
+            stock: 200,
+          },
+          headers: {
+            product_id: PRODUCT_TEST_ID,
+          },
+        })
+        .then((result) => {
+          expect(result.statusCode).toBe(200);
         });
     });
   });
